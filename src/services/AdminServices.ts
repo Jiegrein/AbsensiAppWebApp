@@ -9,9 +9,17 @@ const AdminService = {
     getExcelFromDates: async (dateFrom: Date , dateTo: Date ) => {
         const stringDate = new Date().toISOString().split('T')[0]
         var fileName = "Gajian - " + stringDate + ".xlsx";
+        
+        console.log("Old");
+        console.log(dateFrom);
+        console.log(dateTo);
 
         let from = new Date(dateFrom.toDateString());
         let to = new Date(dateTo.toDateString());
+        
+        console.log("New");
+        console.log(from);
+        console.log(to);
 
         await axios.request({
             method: 'POST',
