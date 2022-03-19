@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://absensi-app-web-api.herokuapp.com/api/v1/admin/';
+const baseUrl = 'https://cors-proxy-absensi-app.herokuapp.com/https://absensi-app-web-api.herokuapp.com/api/v1/admin/';
 
 const AdminService = {
     getExcelFromDates: async (dateFrom: Date, dateTo: Date) => {
