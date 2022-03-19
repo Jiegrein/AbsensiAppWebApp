@@ -1,24 +1,29 @@
 import axios from 'axios';
 
 const baseUrl = 'https://absensi-app-web-api.herokuapp.com/api/v1/admin/';
+// const baseUrl = 'https://localhost:5001/api/v1/admin/';
+
+const fileName = "Gajian tanggal.xlsx";
 
 const AdminService = {
-    getExcelFromDates: async (dateFrom: Date, dateTo: Date) => {
+    getExcelFromDates: async (dateFrom: Date , dateTo: Date ) => {
+        const stringDate = new Date().toISOString().split('T')[0]
+        var fileName = "Gajian - " + stringDate + ".xlsx";
+
+        let from = new Date(dateFrom.toDateString());
+        let to = new Date(dateTo.toDateString());
+
         await axios.request({
             method: 'POST',
             url: baseUrl + "get-data-between-date",
-            data: { dateFrom: dateFrom, dateTo: dateTo},
-            responseType: 'blob',
-            headers: { 
-                'Access-Control-Allow-Origin' : '*',
-                'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-              },
+            data: { dateFrom: from, dateTo: to },
+            responseType: 'blob'
         })
         .then((response) => {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', __filename);
+            link.setAttribute('download', fileName);
             document.body.appendChild(link);
             link.click();
         });
