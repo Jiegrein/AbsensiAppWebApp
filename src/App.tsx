@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// in src/App.js
+import Services from './services/AdminServices';
+import Indo from 'date-fns/locale/id';
+import { useState } from 'react';
+import DatePicker from "react-datepicker";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-function App() {
+export default function App() {
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  registerLocale('id', Indo);
+
+  const handleDownloadClick = async () => {
+    console.log("Download");
+    Services.getExcelFromDates(startDate, endDate);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <DatePicker selected={startDate} onChange={(date: Date) => setStartDate(date)} />
+      <DatePicker selected={endDate} onChange={(date: Date) => setEndDate(date)} />
+
+      <button onClick={handleDownloadClick}>
+        Download Gaji
+      </button>
     </div>
   );
 }
-
-export default App;
