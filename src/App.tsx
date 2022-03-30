@@ -3,7 +3,7 @@ import Services from './services/AdminServices';
 import Indo from 'date-fns/locale/id';
 import { useState } from 'react';
 import DatePicker from "react-datepicker";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
+import { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function App() {
@@ -12,7 +12,6 @@ export default function App() {
   registerLocale('id', Indo);
 
   const handleDownloadClick = async () => {
-    console.log("Download");
     Services.getExcelFromDates(startDate, endDate);
   };
 
