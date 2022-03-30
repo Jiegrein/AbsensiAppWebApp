@@ -3,23 +3,13 @@ import axios from 'axios';
 const baseUrl = 'https://absensiappwebapi.azurewebsites.net/api/v1/admin/';
 // const baseUrl = 'https://localhost:5001/api/v1/admin/';
 
-const fileName = "Gajian tanggal.xlsx";
-
 const AdminService = {
     getExcelFromDates: async (dateFrom: Date , dateTo: Date ) => {
         const stringDate = new Date().toISOString().split('T')[0]
         var fileName = "Gajian - " + stringDate + ".xlsx";
-        
-        console.log("Old");
-        console.log(dateFrom);
-        console.log(dateTo);
 
-        let from = new Date(dateFrom.toDateString());
-        let to = new Date(dateTo.toDateString());
-        
-        console.log("New");
-        console.log(from);
-        console.log(to);
+        let from = new Date(Date.UTC(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate(), 0, 0, 0));
+        let to = new Date(Date.UTC(dateTo.getFullYear(), dateTo.getMonth(), dateTo.getDate(), 23, 59, 59));
 
         await axios.request({
             method: 'POST',
