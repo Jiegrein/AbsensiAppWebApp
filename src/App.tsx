@@ -27,8 +27,18 @@ export default function App() {
 
   const handleDownloadClick = async () => {
     setLoading(true);
-    const options = {
-      onDownloadProgress: (progressEvent: ProgressEvent) => {
+
+    const stringDate = new Date().toISOString().split('T')[0]
+    var fileName = "Gajian - " + stringDate + ".xlsx";
+
+    let from = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0));
+    let to = new Date(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59));
+    await axios.request({
+      method: 'POST',
+      url: baseUrl + "get-data-between-date",
+      data: { dateFrom: from, dateTo: to },
+      responseType: 'blob',
+      onDownloadProgress(progressEvent) {
         const { loaded, total } = progressEvent;
         let percent = Math.floor((loaded * 100) / total);
         console.log(`${loaded}kb of ${total}kb | ${percent}%`);
@@ -36,16 +46,8 @@ export default function App() {
         if (percent < 100) {
           setProgress(percent);
         }
-      }
-    }
-
-    const stringDate = new Date().toISOString().split('T')[0]
-    var fileName = "Gajian - " + stringDate + ".xlsx";
-
-    let from = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0));
-    let to = new Date(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59));
-
-    await axios.post(baseUrl + "get-data-between-date", { dateFrom: from, dateTo: to, responseType: 'blob' }, options)
+      },
+    })
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
