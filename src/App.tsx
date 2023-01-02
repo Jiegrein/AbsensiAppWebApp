@@ -15,8 +15,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import axios from 'axios';
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-const baseUrl = 'https://absensiappwebapi.azurewebsites.net/api/v1/admin/';
-// const baseUrl = 'https://localhost:5001/api/v1/admin/';
+// const baseUrl = 'https://absensiappwebapi.azurewebsites.net/api/v1/admin/';
+const baseUrl = 'https://localhost:5001/api/v1/admin/';
 
 export default function App() {
   const [startDate, setStartDate] = useState(new Date());
@@ -27,8 +27,18 @@ export default function App() {
 
   const handleDownloadClick = async () => {
     setLoading(true);
-    const options = {
-      onDownloadProgress: (progressEvent: ProgressEvent) => {
+
+    const stringDate = new Date().toISOString().split('T')[0]
+    var fileName = "Gajian - " + stringDate + ".xlsx";
+
+    let from = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0));
+    let to = new Date(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59));
+    await axios.request({
+      method: 'POST',
+      url: baseUrl + "get-data-between-date",
+      data: { dateFrom: from, dateTo: to },
+      responseType: 'blob',
+      onDownloadProgress(progressEvent) {
         const { loaded, total } = progressEvent;
         let percent = Math.floor((loaded * 100) / total);
         console.log(`${loaded}kb of ${total}kb | ${percent}%`);
@@ -36,18 +46,8 @@ export default function App() {
         if (percent < 100) {
           setProgress(percent);
         }
-      }
-    }
-
-    const stringDate = new Date().toISOString().split('T')[0]
-    var fileName = "Gajian - " + stringDate + ".xlsx";
-
-    let from = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0));
-    let to = new Date(Date.UTC(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 23, 59, 59));
-
-    await axios.post(baseUrl + "get-data-between-date",
-      { data: { startDate: from, endDate: to }, responseType: 'blob' },
-      options)
+      },
+    })
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
