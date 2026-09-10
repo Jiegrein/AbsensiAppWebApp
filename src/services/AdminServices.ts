@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// const baseUrl = 'https://absensiappwebapi.azurewebsites.net/api/v1/admin/';
-const baseUrl = 'https://localhost:5001/api/v1/admin/';
+import { apiBaseUrl as baseUrl } from '../config';
 
 const AdminService = {
     getExcelFromDates: async (dateFrom: Date , dateTo: Date ) => {
