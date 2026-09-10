@@ -1,6 +1,5 @@
 // in src/App.js
 
-import Services from './services/AdminServices';
 import Indo from 'date-fns/locale/id';
 import { useState } from 'react';
 import DatePicker from "react-datepicker";
