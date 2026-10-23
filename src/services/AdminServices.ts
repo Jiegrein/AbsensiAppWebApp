@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiBaseUrl } from '../config';
+import { adminKey, apiBaseUrl } from '../config';
 
 export type ProgressListener = (percent: number) => void;
 
@@ -23,6 +23,7 @@ const AdminService = {
       `${apiBaseUrl}get-data-between-date`,
       { dateFrom: utcDayStart(dateFrom), dateTo: utcDayEnd(dateTo) },
       {
+        headers: { 'X-Admin-Key': adminKey },
         responseType: 'blob',
         onDownloadProgress: (event: ProgressEvent) => {
           if (onProgress && event.total > 0) {
