@@ -1,4 +1,5 @@
 const API_BASE_URL_VARIABLE = 'REACT_APP_API_BASE_URL';
+const ADMIN_KEY_VARIABLE = 'REACT_APP_ADMIN_KEY';
 
 const ensureTrailingSlash = (url: string): string => (url.endsWith('/') ? url : `${url}/`);
 
@@ -16,3 +17,7 @@ const readRequired = (name: string, value: string | undefined): string => {
 export const apiBaseUrl: string = ensureTrailingSlash(
   readRequired(API_BASE_URL_VARIABLE, process.env.REACT_APP_API_BASE_URL)
 );
+
+// Sent as X-Admin-Key on admin calls. Compiled into the bundle, so it only guards against
+// callers who know the API URL, not against someone reading this page's source.
+export const adminKey: string = readRequired(ADMIN_KEY_VARIABLE, process.env.REACT_APP_ADMIN_KEY);
