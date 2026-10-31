@@ -2,9 +2,12 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+# Bun installs the dependencies; react-scripts itself still runs on Node, which this image provides.
+RUN npm install -g bun@1
 
-RUN npm ci
+COPY package.json bun.lock ./
+
+RUN bun install --frozen-lockfile
 
 COPY . .
 
@@ -19,4 +22,4 @@ ENV REACT_APP_ADMIN_KEY=$REACT_APP_ADMIN_KEY
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["bun", "run", "start"]
