@@ -59,3 +59,10 @@ const longDate = (date: Date): string => format(date, 'EEE, d MMM yyyy', { local
 
 export const formatRange = ({ start, end }: DateRange): string =>
   isSameDay(start, end) ? longDate(start) : `${longDate(start)} – ${longDate(end)}`;
+
+/** Calendar date without a time zone, the form the dashboard API takes for dateFrom/dateTo. */
+export const toIsoDate = (date: Date): string => format(date, 'yyyy-MM-dd');
+
+/** True when the range is exactly one Monday-to-Sunday week, so totals can be labelled weekly. */
+export const isWholeWeek = ({ start, end }: DateRange): boolean =>
+  isSameDay(start, startOfWeek(start, weekOptions)) && isSameDay(end, endOfWeek(start, weekOptions));

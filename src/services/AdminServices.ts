@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { adminKey, apiBaseUrl } from '../config';
+import { adminClient } from './adminClient';
 
 export type ProgressListener = (percent: number) => void;
 
@@ -19,11 +18,10 @@ const reportFileName = (): string => `Gajian - ${new Date().toISOString().split(
 
 const AdminService = {
   getPayrollReport: async (dateFrom: Date, dateTo: Date, onProgress?: ProgressListener): Promise<PayrollReport> => {
-    const response = await axios.post<Blob>(
-      `${apiBaseUrl}get-data-between-date`,
+    const response = await adminClient.post<Blob>(
+      'get-data-between-date',
       { dateFrom: utcDayStart(dateFrom), dateTo: utcDayEnd(dateTo) },
       {
-        headers: { 'X-Admin-Key': adminKey },
         responseType: 'blob',
         onDownloadProgress: (event: ProgressEvent) => {
           if (onProgress && event.total > 0) {

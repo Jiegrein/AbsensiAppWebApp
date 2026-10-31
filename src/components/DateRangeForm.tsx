@@ -24,7 +24,7 @@ interface DateFieldProps {
   onChange: (date: Date) => void;
 }
 
-const DateField = ({ id, label, value, disabled, onChange }: DateFieldProps) => (
+export const DateField = ({ id, label, value, disabled, onChange }: DateFieldProps) => (
   <div className="field">
     <label htmlFor={id}>{label}</label>
     <div className="field__control">
